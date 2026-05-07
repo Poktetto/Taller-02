@@ -4,12 +4,15 @@ import java.util.Scanner;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
 
 public class App {
+	static String usuario;
+	static String medallas;
 
 	public static void main(String[] args) throws IOException {
-		//hi
-		//hiii :D
+		
 		menuInicial();
 		System.out.println("test fin programa");
 	}// main
@@ -47,11 +50,48 @@ public class App {
 		BufferedWriter escritor =new BufferedWriter(writerRegistro); 
 		escritor.write(apodo);
 		escritor.close();
+		s.close();
 		continuar();
 	}//fin nuevaPartida
 
 	private static void continuar() {
-		// No hay nada por ahora 
+		cargarRegistro();
+		
+		
+		// print menu
+		System.out.println("Bienvenido "+ usuario+"\n"+usuario+", que deseas hacer?");
+		System.out.println("1) Revisar equipo\n"
+				+ "2) Salir a capturar\n"
+				+ "3) Acceso al PC (cambiar Pokémon del equipo)\n"
+				+ "4) Retar un gimnasio\n"
+				+ "5) Desafío al Alto Mando\n"
+				+ "6) Curar Pokémon\n"
+				+ "7) Guardar\n"
+				+ "8) Guardar y Salir");
+		
+	}
+
+	private static void cargarRegistro() throws FileNotFoundException {
+		File arch=new File("registros.txt");
+		Scanner s = new Scanner (arch);
+		String linea= s.nextLine();
+		String partes[]= linea.split(";");
+		
+		usuario= partes[0];
+		medallas=partes[1];
+		
+		while (s.hasNextLine()) {
+			String linea2= s.nextLine();
+			String partes2[]= linea2.split(";");
+			String pokemonUsuario = partes[0];
+			String estadoBatalla= partes[1];
+			
+		}
+		
+		
+		
+		
+		
 		
 	}
 
