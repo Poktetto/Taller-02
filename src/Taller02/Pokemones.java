@@ -68,6 +68,17 @@ public class Pokemones {
 	public int getStatTotales() {
 		return statTotal=ataque+vida+defensa+ataqueEspecial+defensaEspecial+velocidad;
 	}
+	public void setPorcentajeAparicion(Double porcentajeAparicion) { //para el porcemtaje total de un habitad sea 1 
+		this.porcentajeAparicion = porcentajeAparicion;
+	}
+	//to String por motivos de testeo
+	@Override
+	public String toString() {
+		return "Pokemones [pokemon=" + pokemon + ", habitat=" + habitat + ", porcentajeAparicion=" + porcentajeAparicion
+				+ ", vida=" + vida + ", ataque=" + ataque + ", defensa=" + defensa + ", ataqueEspecial="
+				+ ataqueEspecial + ", defensaEspecial=" + defensaEspecial + ", velocidad=" + velocidad + ", tipo="
+				+ tipo + ", statTotal=" + statTotal + ", estado=" + estado + "]";
+	}
 	
 	
 
