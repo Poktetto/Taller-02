@@ -13,7 +13,7 @@ import java.io.FileNotFoundException;
 public class App {
 	static String usuario;
 	static int medallas;
-	ArrayList<Pokemones> inventarioPC=new ArrayList<>(); //inventarioPC es usado en? 
+	static ArrayList<Pokemones> inventarioPC=new ArrayList<>(); //inventarioPC es usado en? 
 	public static List<Pokemones> pokedex = new ArrayList<>(); // aqui se crean los objetos por cada pokemon rejistrado
 	
 	public static void main(String[] args) throws IOException {
@@ -244,6 +244,27 @@ public class App {
 		System.out.println("falta poder almacenar pokemon en Registros");
 		
 	}
+	private static void buscarPokemon(String pokemonUsuario, String estadoBatalla) throws FileNotFoundException {
+		//variables  de File
+		File arcPokedex = new File("txts/Pokedex.txt");
+		Scanner scanPokedex = new Scanner(arcPokedex);
+		int contT=0;
+		//ciclo de carga
+		while(scanPokedex.hasNextLine()) {
+			String linea = scanPokedex.nextLine();
+			String[] pokePartes = linea.split(";");
+			if (pokePartes[0].equals(pokemonUsuario)){
+				Pokemones p = new Pokemones(pokePartes[0],pokePartes[1],Double.parseDouble(pokePartes[2]),Integer.parseInt(pokePartes[3]),Integer.parseInt(pokePartes[4]),Integer.parseInt(pokePartes[5]),Integer.parseInt(pokePartes[6]),Integer.parseInt(pokePartes[7]),Integer.parseInt(pokePartes[8]),pokePartes[9]);
+				inventarioPC.add(p);
+				if (estadoBatalla.equals("Debilitado")){
+					p.derrotado();
+					
+				}
+				
+			}
+		
+		}
+	}
 
 	//Carga del archivo txt de registros
 	private static void cargarRegistro() throws FileNotFoundException {
@@ -263,6 +284,10 @@ public class App {
 			String partes2[]= linea2.split(";");
 			String pokemonUsuario = partes[0];
 			String estadoBatalla= partes[1];
+			buscarPokemon(pokemonUsuario,estadoBatalla);
+			
+			
+			
 			
 			
 			
@@ -273,6 +298,7 @@ public class App {
 		
 		
 		s.close();
+		
 		
 		
 	}
