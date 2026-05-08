@@ -66,7 +66,7 @@ public class Pokemones {
 	}
 
 	public int getStatTotales() {
-		return ataque+vida+defensa+ataqueEspecial+defensaEspecial+velocidad;
+		return statTotal=ataque+vida+defensa+ataqueEspecial+defensaEspecial+velocidad;
 	}
 	
 	
