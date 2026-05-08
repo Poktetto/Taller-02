@@ -1,5 +1,6 @@
 package Taller02;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -9,7 +10,8 @@ import java.io.FileNotFoundException;
 
 public class App {
 	static String usuario;
-	static String medallas;
+	static int medallas;
+	ArrayList<Pokemones> inventarioPC=new ArrayList<>();
 
 	public static void main(String[] args) throws IOException {
 		
@@ -48,13 +50,15 @@ public class App {
 		// creacion del Archivo 
 		FileWriter writerRegistro = new FileWriter("txts/Registros.txt");
 		BufferedWriter escritor =new BufferedWriter(writerRegistro); 
-		escritor.write(apodo);
+		escritor.write(apodo+";none");
 		escritor.close();
 		s.close();
 		continuar();
 	}//fin nuevaPartida
-
-	private static void continuar() {
+	
+	
+	//metodo continuar
+	private static void continuar() throws FileNotFoundException {
 		cargarRegistro();
 		
 		
@@ -68,29 +72,68 @@ public class App {
 				+ "6) Curar Pokémon\n"
 				+ "7) Guardar\n"
 				+ "8) Guardar y Salir");
+		int opcion=-1;
+		Scanner s = new Scanner (System.in);
 		
+		do {
+			System.out.print(">");
+			String resp = s.nextLine();
+			opcion= Integer.parseInt(resp);
+			
+			switch (opcion) {
+			
+			case 1:
+				
+			case 2:
+				
+			case 3:
+				
+			case 4:
+				
+			case 5:
+				
+			case 6:
+				
+			case 7:
+				
+			default:
+				break;
+			
+			}
+			
+			
+		}while (opcion!=8);
+		
+		s.close();
 	}
-
+	//Carga del archivo txt de registros
 	private static void cargarRegistro() throws FileNotFoundException {
-		File arch=new File("registros.txt");
+		File arch=new File("txts/registros.txt");
 		Scanner s = new Scanner (arch);
 		String linea= s.nextLine();
 		String partes[]= linea.split(";");
 		
 		usuario= partes[0];
-		medallas=partes[1];
+		if (partes[1].equals("none")) {
+		medallas=0;
+		}
 		
+			
 		while (s.hasNextLine()) {
 			String linea2= s.nextLine();
 			String partes2[]= linea2.split(";");
 			String pokemonUsuario = partes[0];
 			String estadoBatalla= partes[1];
 			
+			
+			
+			
+			
 		}
 		
 		
 		
-		
+		s.close();
 		
 		
 	}
