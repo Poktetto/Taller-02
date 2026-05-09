@@ -15,6 +15,9 @@ public class App {
 	static int medallas;
 	public static ArrayList<Pokemones> inventarioPC=new ArrayList<>(); 
 	public static Gimnasio lideres[]= new Gimnasio[8];
+	public static Gimnasio lider;
+	public static Gimnasio liderAnterior;
+	public static List<Pokemones> equipoLider = new ArrayList<>();
 	
 	
 	
@@ -115,21 +118,91 @@ public class App {
 			
 		}while (opcion!=8);
 		
-		s.close();
+		
 	}
 	//opcion 4
 	private static void retarGimnasio() throws FileNotFoundException {
+		
 		cargarGimnasio();
-		for (int i=0;i<lideres.length;i++) {
+		int opcion=-1;
+		
+		Scanner s = new Scanner (System.in);  
+		for (int i=0;i<lideres.length;i++) { //imprime los lideres pokemon
 	
 			System.out.println(lideres[i]);
 		}
 		System.out.println("9) Volver al menu.");
+		String resp = s.nextLine();
+		opcion= Integer.parseInt(resp); //ingresa "id" del entrenador (tecnicamente no, pero aparenta eso)
+		for (int i=0;i<lideres.length;i++) {
+			if (opcion==1) { // si es el primer lider
+				lider= lideres[0];
+				menuCombate();
+				
+			}else {
+				lider=lideres[opcion-1]; // los demas lideres
+				liderAnterior=lideres[opcion-2];
+				if (liderAnterior.getEstado().equals("Sin derrotar")){
+					System.out.println("Calmado Entrenador!!! No puedes retar a " +lider.getNombre()+ " sin haber derrotado a los lideres anteriores!!");
+					break;
+				}else {
+					menuCombate();
+				}
+				
+				
+				
+				
+			}
+			
+			
+		}
+		
+		
+		
+
+	
+		
+	}
+	private static void menuCombate() {
+		equipoLider= lider.getEquipoEnemigo();
+		
+		System.out.println("Desafiando a "+lider.getNombre()+"!!");
+		
+		int opcion=-1;
+		Scanner s = new Scanner (System.in);
+		
+		do {
+			System.out.println("1) Atacar.");
+			System.out.println("2) Cambiar Pokemon");
+			System.out.println("3) Rendirse.");
+			String resp = s.nextLine();
+			opcion= Integer.parseInt(resp);
+			
+			switch (opcion) {
+			case 1:
+				atacar();
+				break;
+			case 2:
+				cambiarPokemon();
+				break;
+			default:
+				break;
+			
+			}
+			
+		}while (opcion!=3 & opcion!=2 & opcion!=1);
+		
+	}
+	private static void cambiarPokemon() {
+		// TODO Auto-generated method stub
+		
+	}
+	private static void atacar() {
 		
 		
 		
 	}
-	//abrir txt
+	//abrir txt op 4
 	private static void cargarGimnasio() throws FileNotFoundException {
 		
 		int cont=0;
@@ -442,8 +515,8 @@ public class App {
 		while (s.hasNextLine()) {
 			String linea2= s.nextLine();
 			String partes2[]= linea2.split(";");
-			String pokemonUsuario = partes[0];
-			String estadoBatalla= partes[1];
+			String pokemonUsuario = partes2[0];
+			String estadoBatalla= partes2[1];
 			buscarPokemon(pokemonUsuario,estadoBatalla); //busca el pokemon en pokedex.txt y lo agrega, verificando antes si esta vivo o debilitado
 			//creo que hay que cambiar esto el pokemon no se repite
 			

@@ -26,6 +26,7 @@ public class Pokemones {
 		this.defensaEspecial = defensaEspecial;
 		this.velocidad = velocidad;
 		this.tipo = tipo;
+		statTotal=ataque+vida+defensa+ataqueEspecial+defensaEspecial+velocidad;
 	}
 	public String getPokemon() {
 		return pokemon;
@@ -66,7 +67,7 @@ public class Pokemones {
 	}
 
 	public int getStatTotales() {
-		return statTotal=ataque+vida+defensa+ataqueEspecial+defensaEspecial+velocidad;
+		return statTotal;
 	}
 	public void setPorcentajeAparicion(Double porcentajeAparicion) { //para el porcemtaje total de un habitad sea 1 
 		this.porcentajeAparicion = porcentajeAparicion;
@@ -75,7 +76,7 @@ public class Pokemones {
 	@Override
 	public String toString() {
 		//se cuenta la vida para el statTotal? //ni idea
-		statTotal=ataque+vida+defensa+ataqueEspecial+defensaEspecial+velocidad;
+		
 		return  pokemon + "|" + tipo + "|" + statTotal; 
 				
 	}

@@ -28,5 +28,7 @@ public class TablaTipos {
 	public static double[][] getEfectividad() {
 		return EFECTIVIDAD;
 	}
+	
+	
 }
 

@@ -11,6 +11,7 @@ public class Gimnasio {
 	private int id;
 	private String nombre;
 	private String estado;
+	
 	public List<Pokemones> getEquipoEnemigo() {
 		return equipoEnemigo;
 	}
