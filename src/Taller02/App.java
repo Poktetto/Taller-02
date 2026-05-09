@@ -167,7 +167,11 @@ public class App {
 		equipoLider= lider.getEquipoEnemigo();
 		
 		System.out.println("Desafiando a "+lider.getNombre()+"!!");
+		int pokemonLider=0;
+		int pokemonJugador=0;
 		
+		System.out.println(lider.getNombre()+" saca a "+equipoLider.get(pokemonLider).getPokemon()+"!!");
+		System.out.println(usuario+" saca a "+inventarioPC.get(pokemonLider).getPokemon()+"!!");
 		int opcion=-1;
 		Scanner s = new Scanner (System.in);
 		
