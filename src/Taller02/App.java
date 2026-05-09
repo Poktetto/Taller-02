@@ -14,7 +14,7 @@ public class App {
 	static String usuario;
 	static int medallas;
 	public static ArrayList<Pokemones> inventarioPC=new ArrayList<>(); 
-	
+	public static Gimnasio lideres[]= new Gimnasio[8];
 	
 	
 	
@@ -66,7 +66,8 @@ public class App {
 	private static void continuar() throws NumberFormatException, IOException {
 		cargarRegistro();
 		
-		//print saludo
+		//print saludo		
+		
 		System.out.println("Bienvenido "+ usuario+"\n"+usuario+", que deseas hacer?");
 		int opcion=-1;
 		Scanner s = new Scanner (System.in);
@@ -119,6 +120,12 @@ public class App {
 	//opcion 4
 	private static void retarGimnasio() throws FileNotFoundException {
 		cargarGimnasio();
+		for (int i=0;i<lideres.length;i++) {
+	
+			System.out.println(lideres[i]);
+		}
+		System.out.println("9) Volver al menu.");
+		
 		
 		
 	}
@@ -142,6 +149,9 @@ public class App {
 			entrenador.agregarPokemones(partes[i]); //guarda el equipo de pokemon del entrenador
 		}
 		
+		lideres[cont]=entrenador;
+		
+		cont++;
 		
 		
 		
