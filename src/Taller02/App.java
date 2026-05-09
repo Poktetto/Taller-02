@@ -306,8 +306,9 @@ public class App {
 				for(int i =0; i<inventarioPC.size();i++) {
 					System.out.println(cont++ + ") " + inventarioPC.get(i));
 				}
-				System.out.println("==========================");
+				
 			}
+			System.out.println("==========================");
 			
 		} else {
 			System.out.println("no posee Pokemones");
@@ -377,8 +378,21 @@ public class App {
 	private static void aparecerPokemon(String zona) throws IOException {
 		List<Pokemones> pokedex = new ArrayList<>(); // aqui se crean los objetos por cada pokemon rejistrado
 		cargarPokedex(pokedex);
+		buscarPokeEnInventario(pokedex);
 		buscarPokePorZona(zona, pokedex);
 		
+		
+	}
+	//busca si ya se tiene
+	private static void buscarPokeEnInventario(List<Pokemones> pokedex) {
+		for (int i=0;i<inventarioPC.size();i++) {
+			for (int j=0;j<pokedex.size();j++) {
+				if (inventarioPC.get(i).getPokemon().equals(pokedex.get(j).getPokemon())) {
+					pokedex.remove(j);
+				}
+				
+			}
+		}
 		
 	}
 	//carga los pokemones
@@ -409,25 +423,29 @@ public class App {
 				
 			}
 		}//fin For
-		
-		double porcentajeTotal=0;
-		//ciclo de normalizacion de probabilidad 
-		for (int i=0;i<pokePosibles.size();i++) {
-			porcentajeTotal+=pokePosibles.get(i).getPorcentajeAparicion();
-		}
-		if (porcentajeTotal>0) {
+		if (!pokePosibles.isEmpty()) {
+			double porcentajeTotal=0;
+			//ciclo de normalizacion de probabilidad 
 			for (int i=0;i<pokePosibles.size();i++) {
-				double nuevoPorcentaje = pokePosibles.get(i).getPorcentajeAparicion()/porcentajeTotal;
-				pokePosibles.get(i).setPorcentajeAparicion(nuevoPorcentaje);
+				porcentajeTotal+=pokePosibles.get(i).getPorcentajeAparicion();
 			}
-		}//fin normalizacion de probabilidad
-		
-		//actualizar el porcentaje total
-		for (int i=0;i<pokePosibles.size();i++) {
-			porcentajeTotal+=pokePosibles.get(i).getPorcentajeAparicion();
+			if (porcentajeTotal>0) {
+				for (int i=0;i<pokePosibles.size();i++) {
+					double nuevoPorcentaje = pokePosibles.get(i).getPorcentajeAparicion()/porcentajeTotal;
+					pokePosibles.get(i).setPorcentajeAparicion(nuevoPorcentaje);
+				}
+			}//fin normalizacion de probabilidad
+			
+			//actualizar el porcentaje total
+			for (int i=0;i<pokePosibles.size();i++) {
+				porcentajeTotal+=pokePosibles.get(i).getPorcentajeAparicion();
+			}
+			//no puede ser  presisamente 1 debido a que los double son medio inexactos xd
+			aparicionPokemon(pokePosibles); //se crea la aparicion 
+				
+		} else {
+			System.out.println("Ya no quedan pokemones en la zona");
 		}
-		//no puede ser  presisamente 1 debido a que los double son medio inexactos xd
-		aparicionPokemon(pokePosibles); //se crea la aparicion 
 		
 	}
 	//logica deaparicion

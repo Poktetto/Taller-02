@@ -1,4 +1,14 @@
-GUMI;none
-Samurott;Vivo
-Steelix;Vivo
+Teto;none
+Psyduck;Vivo
+Seismitoad;Vivo
+Floatzel;Vivo
 Magikarp;Vivo
+Azumarill;Vivo
+Golduck;Vivo
+Quagsire;Vivo
+Milotic;Vivo
+Ludicolo;Vivo
+Swanna;Vivo
+Poliwrath;Vivo
+Whiscash;Vivo
+Gyarados;Vivo
