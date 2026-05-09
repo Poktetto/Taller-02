@@ -1,0 +1,4 @@
+GUMI;none
+Samurott;Vivo
+Steelix;Vivo
+Magikarp;Vivo

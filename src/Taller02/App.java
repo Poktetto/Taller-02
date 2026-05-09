@@ -14,16 +14,15 @@ public class App {
 	static String usuario;
 	static int medallas;
 	public static ArrayList<Pokemones> inventarioPC=new ArrayList<>(); 
-	public static List<Pokemones> pokedex = new ArrayList<>(); // aqui se crean los objetos por cada pokemon rejistrado
+	
 	
 	
 	
 	public static void main(String[] args) throws IOException {
-		
 		menuInicial();
 		System.out.println("test fin programa");
 	}// main
-
+	//menu Inicial
 	private static void menuInicial() throws IOException {
 		int opcion=-1;
 		Scanner s = new Scanner(System.in);
@@ -45,7 +44,7 @@ public class App {
 		
 		s.close();
 	}// fin menu I
-
+	//opcion 2 menu Inicial
 	private static void nuevaPartida() throws IOException {
 		Scanner s = new Scanner(System.in);
 		
@@ -150,7 +149,7 @@ public class App {
 		}
 		
 	}
-
+	//opcion  3
 	private static void abirPC() throws IOException {
 		Scanner s =new Scanner(System.in);
 		revisarPC();
@@ -165,13 +164,12 @@ public class App {
 			System.out.println("Ahora con cual quiere cambiar el primero (ingrese indice)");
 			respuesta2 = Integer.parseInt(s.nextLine());
 		}while (respuesta2>inventarioPC.size()+1|| respuesta2<0); //comprobar que no coloca un dato invalido 
-		System.out.println(respuesta1+"|"+respuesta2);
 		intercambiarPosiciones(respuesta1, respuesta2);
 		
 		
 		
 	}
-
+	//logica  de intercambio
 	private static void intercambiarPosiciones(int respuesta1, int respuesta2) throws IOException {
 		
 		//intercambio en la lista
@@ -186,37 +184,33 @@ public class App {
 		//intercambio en el txt
 		FileWriter writerRegistro = new FileWriter("txts/Registros.txt"); // se resetea el achivo 
 		BufferedWriter escritor =new BufferedWriter(writerRegistro); //y se procede a recrear con el cambio de posiciones
-		System.out.println(primeraLinea);  //ver porque no escribe
-		
 		escritor.write(primeraLinea);
-
-		escritor.newLine();
-		Scanner s = new Scanner(System.in);
-		String teto = s.nextLine();
+		escritor.close();
 		for (int i=1;i<inventarioPC.size()+1;i++) {
 			addPokeRegistros(i);
 		}
 
 		
 	}
-
+	//imprime el PC (todos los pokemones guardados en Registros)
 	private static void revisarPC() {
 		int cont =1;
 		if (!inventarioPC.isEmpty()) {
-			
+			System.out.println("==========================");
 			for(int i =0; i<inventarioPC.size();i++) { 
 				System.out.println(cont++ + ") " + inventarioPC.get(i));
 			}
-			
+			System.out.println("==========================");
 		} else {
 			System.out.println("no posee Pokemones");
 		}
+		
 	}
-
-	
+	//imprime los primeros 6 pokemones en Registro (equipo)
 	private static void revisarEquipo() {
 		int cont =1;
 		if (!inventarioPC.isEmpty()) {
+			System.out.println("==========================");
 			if (inventarioPC.size()>6) {
 				for(int i =0; i<6;i++) { // en caso que se tengan más de 6 registrados
 					System.out.println(cont++ + ") " + inventarioPC.get(i));
@@ -225,42 +219,59 @@ public class App {
 				for(int i =0; i<inventarioPC.size();i++) {
 					System.out.println(cont++ + ") " + inventarioPC.get(i));
 				}
+				System.out.println("==========================");
 			}
 			
 		} else {
 			System.out.println("no posee Pokemones");
 		}
 		
-		
 	}
-
+	//opcion 2
 	private static void salirCapturar() throws NumberFormatException, IOException {
+		
+		
 		
 		int opcion=-1;
 		//Scanner para Imput
 		Scanner s = new Scanner(System.in);
 		//File
-		cargarHabitats(-1);
-		
-		System.out.println("Ingrese Zona");
-		System.out.print(">");
-		String zona= s.nextLine();
+		cargarHabitats(-414);
+		String zona;
+		do {
+			System.out.println("Ingrese Zona");
+			System.out.print(">");
+			zona= s.nextLine();
+		} while(Integer.parseInt(zona)<=0 || Integer.parseInt(zona)>contarTxt("txts/Habitats.txt"));
 		cargarHabitats(Integer.parseInt(zona));
 		
 	}
-
+	//cuenta cuantos datos hay en un txt
+	private static int contarTxt(String txt) throws FileNotFoundException {
+		int cont=0;
+		File arc = new  File(txt);
+		Scanner sArc = new Scanner(arc);
+		while (sArc.hasNextLine()) {
+			cont++;
+			sArc.nextLine();
+		}
+		return cont;
+	}
+	//carga Habitats
 	private static String cargarHabitats(int zona) throws IOException {
 		int cont=0;
 		File habitats = new File("txts/Habitats.txt");
 		Scanner sHabit = new Scanner(habitats);
 		//ciclo para leer habitats
 		// if para ver si es la primera vez o ya hay 
-		if (zona<=0) {
+		if (zona==-414) {
+			System.out.println("==========================");
 			while (sHabit.hasNextLine()) {
 				String linea =sHabit.nextLine();
 				System.out.println(++cont + ") " +linea);
 				
-			}// fin while 
+			}// fin while
+			System.out.println("==========================");
 		} else {
 			while (sHabit.hasNextLine()) {
 				String linea =sHabit.nextLine();
@@ -275,17 +286,16 @@ public class App {
 		
 		return null;
 	}
-
+	//Entrada a los procesos
 	private static void aparecerPokemon(String zona) throws IOException {
-		cargarPokedex();
-		buscarPokePorZona(zona);
+		List<Pokemones> pokedex = new ArrayList<>(); // aqui se crean los objetos por cada pokemon rejistrado
+		cargarPokedex(pokedex);
+		buscarPokePorZona(zona, pokedex);
 		
 		
 	}
-
-	
-
-	private static void cargarPokedex() throws FileNotFoundException {
+	//carga los pokemones
+	private static void cargarPokedex(List<Pokemones> pokedex) throws FileNotFoundException {
 		//variables  de File
 		File arcPokedex = new File("txts/Pokedex.txt");
 		Scanner scanPokedex = new Scanner(arcPokedex);
@@ -300,8 +310,8 @@ public class App {
 		
 		
 	}
-
-	private static void buscarPokePorZona(String zona) throws IOException {
+	//busca los pokemones por la zona ingresada
+	private static void buscarPokePorZona(String zona, List<Pokemones> pokedex) throws IOException {
 		List <Pokemones> pokePosibles = new ArrayList<>();
 		
 		
@@ -333,7 +343,7 @@ public class App {
 		aparicionPokemon(pokePosibles); //se crea la aparicion 
 		
 	}
-	
+	//logica deaparicion
 	private static void aparicionPokemon(List<Pokemones> pokePosibles) throws IOException {
 		Scanner s  = new Scanner(System.in); //escaner opcion
 		Random rand = new Random();
@@ -368,18 +378,14 @@ public class App {
 			} 
 		} while(opcion!=2 && opcion!=1);
 	}
-	
-	
-	
+	//añade el pokemon a inventarioPC
 	private static void almacenarPokemon(List<Pokemones> pokePosibles, int pokeSalvaje) throws IOException {
 	
 		inventarioPC.add(pokePosibles.get(pokeSalvaje)); //lo hace
 		//se añade a Resitros como metodo de seguidad ( lo mejor seria que tambien se vea cuando se sale del PC)
 		addPokeRegistros(inventarioPC.size()); //no se si esto deberia ir aquí 
 	}
-	
-	
-	
+	//añade pokemon a Registros
 	private static void addPokeRegistros(int indice) throws IOException {
 		FileWriter pokeRegistros = new FileWriter("txts/Registros.txt", true);
 		BufferedWriter writRegistros = new BufferedWriter(pokeRegistros);
@@ -388,7 +394,7 @@ public class App {
 		writRegistros.close();
 		
 	}
-
+	//añade pokemones de Registros a inventarioPC
 	private static void buscarPokemon(String pokemonUsuario, String estadoBatalla) throws FileNotFoundException {
 		//variables  de File
 		File arcPokedex = new File("txts/Pokedex.txt");
@@ -410,7 +416,6 @@ public class App {
 		
 		}
 	}
-
 	//Carga del archivo txt de registros
 	private static void cargarRegistro() throws FileNotFoundException {
 		File arch=new File("txts/Registros.txt");
