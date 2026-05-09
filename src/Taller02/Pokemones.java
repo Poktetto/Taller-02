@@ -74,7 +74,7 @@ public class Pokemones {
 	
 	@Override
 	public String toString() {
-		//se cuenta la vida para el statTotal?
+		//se cuenta la vida para el statTotal? //ni idea
 		statTotal=ataque+vida+defensa+ataqueEspecial+defensaEspecial+velocidad;
 		return  pokemon + "|" + tipo + "|" + statTotal; 
 				

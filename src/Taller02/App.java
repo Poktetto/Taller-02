@@ -16,6 +16,8 @@ public class App {
 	public static ArrayList<Pokemones> inventarioPC=new ArrayList<>(); 
 	public static List<Pokemones> pokedex = new ArrayList<>(); // aqui se crean los objetos por cada pokemon rejistrado
 	
+	
+	
 	public static void main(String[] args) throws IOException {
 		
 		menuInicial();
@@ -37,6 +39,7 @@ public class App {
 			}
 			if (opcion==2) {
 				nuevaPartida();
+				
 			}
 		}while (opcion!=3);
 		
@@ -55,7 +58,7 @@ public class App {
 		BufferedWriter escritor =new BufferedWriter(writerRegistro); 
 		escritor.write(apodo+";none");
 		escritor.close();
-		s.close();
+		
 		continuar();
 	}//fin nuevaPartida
 	
@@ -96,6 +99,7 @@ public class App {
 				abirPC();
 				break;
 			case 4:
+				retarGimnasio();
 				break;
 			case 5:
 				break;
@@ -113,6 +117,40 @@ public class App {
 		
 		s.close();
 	}
+	//opcion 4
+	private static void retarGimnasio() throws FileNotFoundException {
+		cargarGimnasio();
+		
+		
+	}
+	//abrir txt
+	private static void cargarGimnasio() throws FileNotFoundException {
+		
+		int cont=0;
+		File archGimnasios=new File("txts/Gimnasios.txt");
+		Scanner sGyms = new Scanner (archGimnasios);
+		while (sGyms.hasNextLine()) {
+		String linea= sGyms.nextLine();
+		String partes[]= linea.split(";");
+		int id= Integer.parseInt(partes[0]);
+		String nombre = partes[1];
+		String estado= partes[2];
+		
+		Gimnasio entrenador = new Gimnasio(id,nombre,estado); //crea entrenador
+		
+		int cantPokemones= Integer.parseInt(partes[3]);
+		for (int i =4;i<cantPokemones+1;i++) {
+			entrenador.agregarPokemones(partes[i]); //guarda el equipo de pokemon del entrenador
+		}
+		
+		
+		
+		
+		
+		}
+		
+	}
+
 	private static void abirPC() throws IOException {
 		Scanner s =new Scanner(System.in);
 		revisarPC();
@@ -148,8 +186,8 @@ public class App {
 		//intercambio en el txt
 		FileWriter writerRegistro = new FileWriter("txts/Registros.txt"); // se resetea el achivo 
 		BufferedWriter escritor =new BufferedWriter(writerRegistro); //y se procede a recrear con el cambio de posiciones
-		System.out.println(primeraLinea);  //ver porque no escrive
-		escritor.write(primeraLinea+";Vivo");
+		System.out.println(primeraLinea);  //ver porque no escribe
+		
 		escritor.write(primeraLinea);
 
 		escritor.newLine();
@@ -375,7 +413,7 @@ public class App {
 
 	//Carga del archivo txt de registros
 	private static void cargarRegistro() throws FileNotFoundException {
-		File arch=new File("txts/registros.txt");
+		File arch=new File("txts/Registros.txt");
 		Scanner s = new Scanner (arch);
 		String linea= s.nextLine();
 		String partes[]= linea.split(";");
@@ -391,8 +429,8 @@ public class App {
 			String partes2[]= linea2.split(";");
 			String pokemonUsuario = partes[0];
 			String estadoBatalla= partes[1];
-			buscarPokemon(pokemonUsuario,estadoBatalla);
-			
+			buscarPokemon(pokemonUsuario,estadoBatalla); //busca el pokemon en pokedex.txt y lo agrega, verificando antes si esta vivo o debilitado
+			//creo que hay que cambiar esto el pokemon no se repite
 			
 			
 			
