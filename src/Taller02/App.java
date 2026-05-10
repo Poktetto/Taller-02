@@ -15,6 +15,7 @@ public class App {
 	static int medallas;
 	public static ArrayList<Pokemones> inventarioPC=new ArrayList<>(); 
 	public static Gimnasio lideres[]= new Gimnasio[8];
+	public static AltoMando[] lideresAltoMAndo=new AltoMando[7];
 	public static Gimnasio lider;
 	public static Gimnasio liderAnterior;
 	public static List<Pokemones> equipoLider = new ArrayList<>();
@@ -116,6 +117,7 @@ public class App {
 				retarGimnasio();
 				break;
 			case 5:
+				retarAltoMando();
 				break;
 			case 6:
 				curarPokemon();
@@ -136,6 +138,39 @@ public class App {
 		
 		
 	}
+	private static void retarAltoMando() throws FileNotFoundException {
+		cargarAltoMando();
+		
+	}
+	private static void cargarAltoMando() throws FileNotFoundException {
+		int cont=0;
+		File archAltoMando=new File("txts/Alto Mando.txt");
+		Scanner sGyms = new Scanner (archAltoMando);
+		while (sGyms.hasNextLine()) {
+			String linea= sGyms.nextLine();
+			String partes[]= linea.split(";");
+			int id= Integer.parseInt(partes[0]);
+			String nombre = partes[1];
+	
+			
+			AltoMando entrenador = new AltoMando(id,nombre); //crea entrenador
+			
+			
+	
+			for (int i =3;i<9;i++) {
+	
+				entrenador.agregarPokemones(partes[i]); //guarda el equipo de pokemon del entrenador
+			}
+			
+			
+			lideresAltoMAndo[cont]=entrenador;
+			
+			cont++;
+		}
+		
+	}
+		
+	
 	//re escribe todo el txt registros en base a el inventarioPC
 	private static void guardarPartida() throws IOException {
 		//almacenaje primera linea

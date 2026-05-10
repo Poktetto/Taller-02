@@ -1,3 +1,4 @@
+
 1;MartinGalactico;Magikarp;Noivern;Excadrill;Steelix;Lucario;Scizor
 2;Estefania;Victini;Azumarill;Floatzel;Magcargo;Ludicolo;Seismitoad
 3;Catalina;Snorlax;Milotic;Froslass;Shiftry;Mewtwo;Kingler

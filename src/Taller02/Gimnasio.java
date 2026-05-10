@@ -17,7 +17,7 @@ public class Gimnasio {
 	}
 	
 	public Gimnasio(int id, String nombre, String estado) {
-		super();
+		
 		this.id = id;
 		this.nombre = nombre;
 		this.estado = estado;
