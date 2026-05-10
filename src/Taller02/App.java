@@ -16,6 +16,7 @@ public class App {
 	public static ArrayList<Pokemones> inventarioPC=new ArrayList<>(); 
 	public static Gimnasio lideres[]= new Gimnasio[8];
 	public static AltoMando[] lideresAltoMAndo=new AltoMando[7];
+	public static AltoMando liderAltoMando;
 	public static Gimnasio lider;
 	public static Gimnasio liderAnterior;
 	public static List<Pokemones> equipoLider = new ArrayList<>();
@@ -57,7 +58,7 @@ public class App {
 			
 		}while (opcion!=3);
 		
-		s.close();
+	
 	}// fin menu I
 	//opcion 2 menu Inicial
 	private static void nuevaPartida() throws IOException {
@@ -144,8 +145,84 @@ public class App {
 		
 		
 	}
-	private static void retarAltoMando() throws FileNotFoundException {
+	private static void retarAltoMando() throws IOException {
 		cargarAltoMando();
+		//creacionn copiar
+		
+		int gimasioDerrotado=0;
+		  
+		
+	
+		
+		
+		for (int i=0;i<lideres.length;i++) {
+			if (lideres[i].getEstado().equals("Sin derrotar")) { // si es el primer lider
+				
+				gimasioDerrotado=1;
+			}}
+				
+				
+			if (gimasioDerrotado==1) {
+				System.out.println("Calmado Entrenador!!! No puedes retar a los miembros del Alto Mando sin haber derrotado a los lideres del Gimnasio!!");
+				
+				
+			}else {
+				
+				System.out.println("Que empieze el Torneo!!");
+				menuCombateAltoM();
+			}
+				
+				
+				
+				
+				
+			}
+			
+			
+		
+	private static void menuCombateAltoM() throws IOException {
+		equipoLider= liderAltoMando.getEquipoEnemigo(); //se crea el el equipo pokemon del lider
+		
+		System.out.println("Desafiando a "+liderAltoMando.getNombre()+"!!");
+		int pokemonLider=0; //para buscar pokemon que peleara
+		int pokemonJugador=0; //para buscar pokemon que peleara
+		
+		//aqui empieza el combate 
+		int opcion=-1;
+		do {
+			System.out.println(liderAltoMando.getNombre()+" saca a "+equipoLider.get(pokemonLider).getPokemon()+"!!");
+			System.out.println(usuario+" saca a "+inventarioPC.get(pokemonJugador).getPokemon()+"!!");
+			Scanner s = new Scanner (System.in);
+			
+			do {
+				System.out.println("1) Atacar.");
+				System.out.println("2) Cambiar Pokemon");
+				System.out.println("3) Rendirse.");
+				String resp = s.nextLine();
+				opcion= Integer.parseInt(resp);
+				
+				switch (opcion) {
+				case 1:
+					atacar(pokemonLider,pokemonJugador);
+	
+					break;
+				case 2:
+					cambiarPokemon();
+					break;
+				default:
+					break;
+					
+				}
+				
+			}while (opcion < 1 || opcion > 3); 
+		}while (pokemonEsVivo(pokemonJugador)!=-1 && pokemonEnemigoEsVivo(pokemonLider)!=-1 && opcion!=3);
+		if (pokemonEsVivo(pokemonJugador)==-1) {
+			System.out.println(usuario+" ha perdido el combate");
+		} 
+		if (pokemonEnemigoEsVivo(pokemonLider)==-1) {
+			//liderAltoMando.derrotado();
+			medallas+=1;
+		}
 		
 	}
 	private static void cargarAltoMando() throws FileNotFoundException {
@@ -163,7 +240,7 @@ public class App {
 			
 			
 	
-			for (int i =3;i<9;i++) {
+			for (int i =3;i<8;i++) {
 	
 				entrenador.agregarPokemones(partes[i]); //guarda el equipo de pokemon del entrenador
 			}
@@ -173,6 +250,7 @@ public class App {
 			
 			cont++;
 		}
+		sGyms.close();
 		
 	}
 		
