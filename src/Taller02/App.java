@@ -126,7 +126,7 @@ public class App {
 		
 	}
 	//opcion 4
-	private static void retarGimnasio() throws FileNotFoundException {
+	private static void retarGimnasio() throws IOException {
 		
 		cargarGimnasio();
 		int opcion=-1;
@@ -169,45 +169,49 @@ public class App {
 	
 		
 	}
-	private static void menuCombate() {
+	private static void menuCombate() throws IOException {
 		equipoLider= lider.getEquipoEnemigo(); //se crea el el equipo pokemon del lider
 		
 		System.out.println("Desafiando a "+lider.getNombre()+"!!");
 		int pokemonLider=0; //para buscar pokemon que peleara
 		int pokemonJugador=0; //para buscar pokemon que peleara
 		
-		System.out.println(lider.getNombre()+" saca a "+equipoLider.get(pokemonLider).getPokemon()+"!!");
-		System.out.println(usuario+" saca a "+inventarioPC.get(pokemonJugador).getPokemon()+"!!");
+		//aqui empieza el combate 
 		int opcion=-1;
-		Scanner s = new Scanner (System.in);
-		
 		do {
-			System.out.println("1) Atacar.");
-			System.out.println("2) Cambiar Pokemon");
-			System.out.println("3) Rendirse.");
-			String resp = s.nextLine();
-			opcion= Integer.parseInt(resp);
+			System.out.println(lider.getNombre()+" saca a "+equipoLider.get(pokemonLider).getPokemon()+"!!");
+			System.out.println(usuario+" saca a "+inventarioPC.get(pokemonJugador).getPokemon()+"!!");
+			Scanner s = new Scanner (System.in);
 			
-			switch (opcion) {
-			case 1:
-				atacar(pokemonLider,pokemonJugador);
-				break;
-			case 2:
-				cambiarPokemon();
-				break;
-			default:
-				break;
-			
-			}
-			
-		}while (opcion!=3 && opcion!=2 && opcion!=1);
+			do {
+				System.out.println("1) Atacar.");
+				System.out.println("2) Cambiar Pokemon");
+				System.out.println("3) Rendirse.");
+				String resp = s.nextLine();
+				opcion= Integer.parseInt(resp);
+				
+				switch (opcion) {
+				case 1:
+					atacar(pokemonLider,pokemonJugador);
+	
+					break;
+				case 2:
+					cambiarPokemon();
+					break;
+				default:
+					break;
+					
+				}
+				
+			}while (opcion < 1 || opcion > 3); 
+		}while (pokemonEsVivo(pokemonJugador)!=-1 && pokemonEnemigoEsVivo(pokemonLider)!=-1 && opcion!=3);
+		
 		
 	}
 	private static void cambiarPokemon() {
-		// TODO Auto-generated method stub
-		
+		//por ahora no es necesario 
 	}
-	private static void atacar(int pokemonLider,int pokemonJugador) {
+	private static void atacar(int pokemonLider,int pokemonJugador) throws IOException {
 		statsEnemigo=equipoLider.get(pokemonLider).getStatTotales();// puntaje del pokemon del lider
 		statsJugador=inventarioPC.get(pokemonJugador).getStatTotales();// puntaje inicial del pokemon del jugador
 		
@@ -236,13 +240,62 @@ public class App {
 		}
 		if (statsJugador>statsEnemigo) {// si el pokemon del jugador es mas fuerte
 			System.out.println("Ha ganado "+inventarioPC.get(pokemonJugador).getPokemon()+"!"+equipoLider.get(pokemonLider).getPokemon()+" ha sido derrotado...");
-			//no se si hacer el cambio de pokemon del lider aqui o afuera del metodo
+			equipoLider.get(pokemonLider).derrotado();
+			intercambiarPosicionesEnemigo(pokemonLider, pokemonEnemigoEsVivo(pokemonLider));
+			
 		}else {//si el pokemon del lider es mas fuerte
 			System.out.println("Ha ganado "+equipoLider.get(pokemonLider).getPokemon()+"!"+inventarioPC.get(pokemonJugador).getPokemon()+" ha sido derrotado...");
-			inventarioPC.get(pokemonLider).derrotado();
+			inventarioPC.get(pokemonJugador).derrotado(); //derrotas al pokemon
+			intercambiarPosiciones(pokemonJugador+1,pokemonEsVivo(pokemonJugador)+1); 
 			//falta el cambio de pokemon
 		}
 		
+	
+	}
+	private static void intercambiarPosicionesEnemigo(int pokemonActual, int pokemonVivo) {
+		//intercambio en la lista
+				Pokemones temp = equipoLider.get(pokemonActual);
+				equipoLider.set(pokemonActual, equipoLider.get(pokemonVivo));
+				equipoLider.set(pokemonVivo,temp);
+				
+		
+	}
+	//verifica el primer pokemon vivo Solo para el Enemigo
+	private static int pokemonEnemigoEsVivo(int pokemonLider) {
+		if (equipoLider.size()<6) { //en caso que tenga menos de 6 pokemones
+			for (int i=0;i<equipoLider.size();i++) {
+				if (equipoLider.get(i).getEstado().equals("Vivo")) {
+					return i;
+					
+				}
+			}
+		} else {
+			for (int i=0;i<6;i++) {
+				if (equipoLider.get(i).getEstado().equals("Vivo")) {
+					return i;		
+				}
+			}
+		}
+		return -1;
+	}
+	//verifica el primer pokemon vivo Solo para el jugador 
+	private static int pokemonEsVivo(int pokemonJugador) {
+		if (inventarioPC.size()<6) { //en caso que tenga menos de 6 pokemones
+			for (int i=0;i<inventarioPC.size();i++) {
+				if (inventarioPC.get(i).getEstado().equals("Vivo")) {
+					return i;
+					
+				}
+			}
+		} else {
+			for (int i=0;i<6;i++) {
+				if (inventarioPC.get(i).getEstado().equals("Vivo")) {
+					return i;		
+				}
+			}
+		}
+		
+		return -1;
 		
 	}
 	//abrir txt op 4
@@ -252,26 +305,24 @@ public class App {
 		File archGimnasios=new File("txts/Gimnasios.txt");
 		Scanner sGyms = new Scanner (archGimnasios);
 		while (sGyms.hasNextLine()) {
-		String linea= sGyms.nextLine();
-		String partes[]= linea.split(";");
-		int id= Integer.parseInt(partes[0]);
-		String nombre = partes[1];
-		String estado= partes[2];
-		
-		Gimnasio entrenador = new Gimnasio(id,nombre,estado); //crea entrenador
-		
-		int cantPokemones= Integer.parseInt(partes[3]);
-		for (int i =4;i<cantPokemones+1;i++) {
-			entrenador.agregarPokemones(partes[i]); //guarda el equipo de pokemon del entrenador
-		}
-		
-		lideres[cont]=entrenador;
-		
-		cont++;
-		
-		
-		
-		
+			String linea= sGyms.nextLine();
+			String partes[]= linea.split(";");
+			int id= Integer.parseInt(partes[0]);
+			String nombre = partes[1];
+			String estado= partes[2];
+			
+			Gimnasio entrenador = new Gimnasio(id,nombre,estado); //crea entrenador
+			
+			int cantPokemones= Integer.parseInt(partes[3])+3;
+	
+			for (int i =4;i<cantPokemones+1;i++) {
+	
+				entrenador.agregarPokemones(partes[i]); //guarda el equipo de pokemon del entrenador
+			}
+			
+			lideres[cont]=entrenador;
+			
+			cont++;
 		}
 		
 	}

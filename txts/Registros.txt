@@ -1,10 +1,10 @@
 Teto;none
-Psyduck;Vivo
-Seismitoad;Vivo
-Floatzel;Vivo
-Magikarp;Vivo
-Azumarill;Vivo
 Golduck;Vivo
+Magikarp;Vivo
+Seismitoad;Vivo
+Psyduck;Vivo
+Floatzel;Vivo
+Azumarill;Vivo
 Quagsire;Vivo
 Milotic;Vivo
 Ludicolo;Vivo

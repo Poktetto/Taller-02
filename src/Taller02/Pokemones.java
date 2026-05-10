@@ -58,7 +58,7 @@ public class Pokemones {
 	public String getTipo() {
 		return tipo;
 	}
-	public String getestado() {
+	public String getEstado() {
 		return estado;
 		
 	}
