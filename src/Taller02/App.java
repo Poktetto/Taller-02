@@ -215,8 +215,8 @@ public class App {
 		statsEnemigo=equipoLider.get(pokemonLider).getStatTotales();// puntaje del pokemon del lider
 		statsJugador=inventarioPC.get(pokemonJugador).getStatTotales();// puntaje inicial del pokemon del jugador
 		
-		System.out.println(inventarioPC.get(pokemonLider).getPokemon()+" ->"+statsJugador);
-		System.out.println(equipoLider.get(pokemonJugador).getPokemon()+" ->"+statsEnemigo);
+		System.out.println(inventarioPC.get(pokemonJugador).getPokemon()+" ->"+statsJugador);
+		System.out.println(equipoLider.get(pokemonLider).getPokemon()+" ->"+statsEnemigo);
 		
 		for (int i=0; i< tipoPokemon.length;i++) {
 			if (equipoLider.get(pokemonLider).getTipo().equals(tipoPokemon[i])) {
@@ -230,20 +230,24 @@ public class App {
 		
 		statsJugador= (int) (statsJugador*TablaTipos.getEfectividad(pokemonLider, pokemonJugador)); //multiplicara el stat por la efectividad
 		if (TablaTipos.getEfectividad(pokemonLider, pokemonJugador)==0.0||TablaTipos.getEfectividad(pokemonLider, pokemonJugador)==0.5){ //imprime en caso que no sea efectivo
-			System.out.println(inventarioPC.get(pokemonLider).getPokemon()+" no es efectivo contra "+equipoLider.get(pokemonLider).getPokemon());
+			System.out.println(inventarioPC.get(pokemonJugador).getPokemon()+" no es efectivo contra "+equipoLider.get(pokemonLider).getPokemon());
 			System.out.println(inventarioPC.get(pokemonJugador).getPokemon()+" ->"+statsJugador);
 			System.out.println(equipoLider.get(pokemonLider).getPokemon()+" ->"+statsEnemigo);
 		}else if (TablaTipos.getEfectividad(pokemonLider, pokemonJugador)==2.0) { //imprime en caso que SI sea efectivo
-			System.out.println(inventarioPC.get(pokemonLider).getPokemon()+"es efectivo contra "+equipoLider.get(pokemonLider).getPokemon()+"!!");
+			System.out.println(inventarioPC.get(pokemonJugador).getPokemon()+"es efectivo contra "+equipoLider.get(pokemonLider).getPokemon()+"!!");
 			System.out.println(inventarioPC.get(pokemonJugador).getPokemon()+" ->"+statsJugador);
 			System.out.println(equipoLider.get(pokemonLider).getPokemon()+" ->"+statsEnemigo);
 		}
 		if (statsJugador>statsEnemigo) {// si el pokemon del jugador es mas fuerte
 			System.out.println("Ha ganado "+inventarioPC.get(pokemonJugador).getPokemon()+"!"+equipoLider.get(pokemonLider).getPokemon()+" ha sido derrotado...");
 			equipoLider.get(pokemonLider).derrotado();
-			intercambiarPosicionesEnemigo(pokemonLider, pokemonEnemigoEsVivo(pokemonLider));
+		    int siguienteVivo = pokemonEnemigoEsVivo(pokemonLider);
+			 if (siguienteVivo != -1) {
+			        intercambiarPosicionesEnemigo(pokemonLider, siguienteVivo);
+			    } else {
+			        System.out.println("¡El líder no tiene más Pokémon! ¡Has ganado el combate!");
 			
-		}else {//si el pokemon del lider es mas fuerte
+		}}else {//si el pokemon del lider es mas fuerte
 			System.out.println("Ha ganado "+equipoLider.get(pokemonLider).getPokemon()+"!"+inventarioPC.get(pokemonJugador).getPokemon()+" ha sido derrotado...");
 			inventarioPC.get(pokemonJugador).derrotado(); //derrotas al pokemon
 			intercambiarPosiciones(pokemonJugador+1,pokemonEsVivo(pokemonJugador)+1); 

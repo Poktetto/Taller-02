@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Gimnasio {
-	static List<Pokemones> equipoEnemigo = new ArrayList<>();//lista de los pokemon de los enemigos
+	private List<Pokemones> equipoEnemigo = new ArrayList<>();//lista de los pokemon de los enemigos
 	private int id;
 	private String nombre;
 	private String estado;
