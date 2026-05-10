@@ -25,9 +25,10 @@ public class TablaTipos {
         {  1.0, 0.5, 1.0, 1.0, 1.0, 1.0, 2.0, 0.5, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 2.0, 0.5, 2.0, 1.0 }  // HADA
     };
 
-	public static double[][] getEfectividad() {
-		return EFECTIVIDAD;
+    public static double getEfectividad(int i,int j) {
+		return EFECTIVIDAD[i][j];
 	}
+	
 	
 	
 }

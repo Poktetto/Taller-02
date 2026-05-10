@@ -18,6 +18,11 @@ public class App {
 	public static Gimnasio lider;
 	public static Gimnasio liderAnterior;
 	public static List<Pokemones> equipoLider = new ArrayList<>();
+	public static int statsEnemigo;
+	public static int statsJugador;
+	public static String tipoPokemon[]={"Normal","Fuego","Agua","Planta","Electrico","Hielo","Lucha","Veneno","Tierra","Volado","Psiquico","Bicho","Roca","Fantasma","Dragon","Acero","Siniestro","Hada"};
+	public static int indJugador;
+	public static int indLider;
 	
 	
 	
@@ -138,7 +143,7 @@ public class App {
 			if (opcion==1) { // si es el primer lider
 				lider= lideres[0];
 				menuCombate();
-				
+				break;
 			}else {
 				lider=lideres[opcion-1]; // los demas lideres
 				liderAnterior=lideres[opcion-2];
@@ -147,6 +152,7 @@ public class App {
 					break;
 				}else {
 					menuCombate();
+					break;
 				}
 				
 				
@@ -164,14 +170,14 @@ public class App {
 		
 	}
 	private static void menuCombate() {
-		equipoLider= lider.getEquipoEnemigo();
+		equipoLider= lider.getEquipoEnemigo(); //se crea el el equipo pokemon del lider
 		
 		System.out.println("Desafiando a "+lider.getNombre()+"!!");
-		int pokemonLider=0;
-		int pokemonJugador=0;
+		int pokemonLider=0; //para buscar pokemon que peleara
+		int pokemonJugador=0; //para buscar pokemon que peleara
 		
 		System.out.println(lider.getNombre()+" saca a "+equipoLider.get(pokemonLider).getPokemon()+"!!");
-		System.out.println(usuario+" saca a "+inventarioPC.get(pokemonLider).getPokemon()+"!!");
+		System.out.println(usuario+" saca a "+inventarioPC.get(pokemonJugador).getPokemon()+"!!");
 		int opcion=-1;
 		Scanner s = new Scanner (System.in);
 		
@@ -184,7 +190,7 @@ public class App {
 			
 			switch (opcion) {
 			case 1:
-				atacar();
+				atacar(pokemonLider,pokemonJugador);
 				break;
 			case 2:
 				cambiarPokemon();
@@ -194,15 +200,48 @@ public class App {
 			
 			}
 			
-		}while (opcion!=3 & opcion!=2 & opcion!=1);
+		}while (opcion!=3 && opcion!=2 && opcion!=1);
 		
 	}
 	private static void cambiarPokemon() {
 		// TODO Auto-generated method stub
 		
 	}
-	private static void atacar() {
+	private static void atacar(int pokemonLider,int pokemonJugador) {
+		statsEnemigo=equipoLider.get(pokemonLider).getStatTotales();// puntaje del pokemon del lider
+		statsJugador=inventarioPC.get(pokemonJugador).getStatTotales();// puntaje inicial del pokemon del jugador
 		
+		System.out.println(inventarioPC.get(pokemonLider).getPokemon()+" ->"+statsJugador);
+		System.out.println(equipoLider.get(pokemonJugador).getPokemon()+" ->"+statsEnemigo);
+		
+		for (int i=0; i< tipoPokemon.length;i++) {
+			if (equipoLider.get(pokemonLider).getTipo().equals(tipoPokemon[i])) {
+				
+				indLider=i;
+			}
+			if (inventarioPC.get(pokemonJugador).getTipo().equals(tipoPokemon[i])) { 
+				indJugador=i;
+			}
+		}
+		
+		statsJugador= (int) (statsJugador*TablaTipos.getEfectividad(pokemonLider, pokemonJugador)); //multiplicara el stat por la efectividad
+		if (TablaTipos.getEfectividad(pokemonLider, pokemonJugador)==0.0||TablaTipos.getEfectividad(pokemonLider, pokemonJugador)==0.5){ //imprime en caso que no sea efectivo
+			System.out.println(inventarioPC.get(pokemonLider).getPokemon()+" no es efectivo contra "+equipoLider.get(pokemonLider).getPokemon());
+			System.out.println(inventarioPC.get(pokemonJugador).getPokemon()+" ->"+statsJugador);
+			System.out.println(equipoLider.get(pokemonLider).getPokemon()+" ->"+statsEnemigo);
+		}else if (TablaTipos.getEfectividad(pokemonLider, pokemonJugador)==2.0) { //imprime en caso que SI sea efectivo
+			System.out.println(inventarioPC.get(pokemonLider).getPokemon()+"es efectivo contra "+equipoLider.get(pokemonLider).getPokemon()+"!!");
+			System.out.println(inventarioPC.get(pokemonJugador).getPokemon()+" ->"+statsJugador);
+			System.out.println(equipoLider.get(pokemonLider).getPokemon()+" ->"+statsEnemigo);
+		}
+		if (statsJugador>statsEnemigo) {// si el pokemon del jugador es mas fuerte
+			System.out.println("Ha ganado "+inventarioPC.get(pokemonJugador).getPokemon()+"!"+equipoLider.get(pokemonLider).getPokemon()+" ha sido derrotado...");
+			//no se si hacer el cambio de pokemon del lider aqui o afuera del metodo
+		}else {//si el pokemon del lider es mas fuerte
+			System.out.println("Ha ganado "+equipoLider.get(pokemonLider).getPokemon()+"!"+inventarioPC.get(pokemonJugador).getPokemon()+" ha sido derrotado...");
+			inventarioPC.get(pokemonLider).derrotado();
+			//falta el cambio de pokemon
+		}
 		
 		
 	}
