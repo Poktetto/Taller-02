@@ -32,6 +32,9 @@ public class Gimnasio {
 	public String getEstado() {
 		return estado;
 	}
+	public String derrotado() {
+		return estado="Derrotado";
+	}
 		
 	public void agregarPokemones(String pokemon) throws FileNotFoundException {
 		//variables  de File

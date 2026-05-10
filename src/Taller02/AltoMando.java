@@ -10,4 +10,9 @@ public class AltoMando {
 		this.nombre = nombre;
 	}
 
+	public void agregarPokemones(String string) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

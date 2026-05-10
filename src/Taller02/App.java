@@ -79,6 +79,12 @@ public class App {
 	
 	//metodo continuar
 	private static void continuar() throws NumberFormatException, IOException {
+		for (int j=0;j<8;j++) {
+			if (lideres[j]==null) {
+				cargarGimnasio();
+				
+			}
+		}
 		cargarRegistro();
 		
 		//print saludo		
@@ -177,10 +183,22 @@ public class App {
 		File regist = new File("txts/Registros.txt");
 		Scanner scanReg = new Scanner(regist);
 		String primeraLinea = scanReg.nextLine();
+		String[] partes =primeraLinea.split(";");
+		String linea;
+		if (lideres[0].getEstado().equals("Derrotado")) {
+			linea = partes[0];
+			for (int i=0;i<8;i++) {
+				if (lideres[i].getEstado().equals("Derrotado")) {
+					linea+=";"+lideres[i].getNombre();
+				}
+			}
+		}else {
+			linea=partes[0]+";none";
+		}
 		//re escritura del txt
 		FileWriter writerRegistro = new FileWriter("txts/Registros.txt"); // se resetea el achivo 
 		BufferedWriter escritor =new BufferedWriter(writerRegistro); //y se procede a recrear
-		escritor.write(primeraLinea);
+		escritor.write(linea);
 		escritor.close();
 		for (int i=1;i<inventarioPC.size()+1;i++) {
 			addPokeRegistros(i);
@@ -200,7 +218,7 @@ public class App {
 	//opcion 4
 	private static void retarGimnasio() throws IOException {
 		
-		cargarGimnasio();
+
 		int opcion=-1;
 		
 		Scanner s = new Scanner (System.in);  
@@ -277,7 +295,13 @@ public class App {
 				
 			}while (opcion < 1 || opcion > 3); 
 		}while (pokemonEsVivo(pokemonJugador)!=-1 && pokemonEnemigoEsVivo(pokemonLider)!=-1 && opcion!=3);
-		
+		if (pokemonEsVivo(pokemonJugador)==-1) {
+			System.out.println(usuario+" ha perdido el combate");
+		} 
+		if (pokemonEnemigoEsVivo(pokemonLider)==-1) {
+			lider.derrotado();
+			medallas+=1;
+		}
 		
 	}
 	private static void cambiarPokemon() throws IOException {
@@ -365,7 +389,9 @@ public class App {
 		}}else {//si el pokemon del lider es mas fuerte
 			System.out.println("Ha ganado "+equipoLider.get(pokemonLider).getPokemon()+"!"+inventarioPC.get(pokemonJugador).getPokemon()+" ha sido derrotado...");
 			inventarioPC.get(pokemonJugador).derrotado(); //derrotas al pokemon
-			intercambiarPosiciones(pokemonJugador+1,pokemonEsVivo(pokemonJugador)+1); 
+			if (pokemonEsVivo(pokemonJugador)>0) {
+				intercambiarPosiciones(pokemonJugador+1,pokemonEsVivo(pokemonJugador)+1); 
+			}
 			//falta el cambio de pokemon
 		}
 		
@@ -727,9 +753,20 @@ public class App {
 		usuario= partes[0];
 		if (partes[1].equals("none")) {
 		medallas=0;
+		} else {
+			for (int i=1;i<partes.length;i++) {
+				for (int j=0;j<8;j++) {
+					if (lideres[j].getNombre().equals(partes[i])) {
+						lideres[j].derrotado();
+					}
+				}
+			}
+	
+			medallas=partes.length-1;
+
+			
 		}
 		
-			
 		while (s.hasNextLine()) {
 			String linea2= s.nextLine();
 			String partes2[]= linea2.split(";");
