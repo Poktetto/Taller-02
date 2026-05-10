@@ -144,7 +144,7 @@ public class App {
 		String primeraLinea = scanReg.nextLine();
 		//re escritura del txt
 		FileWriter writerRegistro = new FileWriter("txts/Registros.txt"); // se resetea el achivo 
-		BufferedWriter escritor =new BufferedWriter(writerRegistro); //y se procede a recrear con el cambio de posiciones
+		BufferedWriter escritor =new BufferedWriter(writerRegistro); //y se procede a recrear
 		escritor.write(primeraLinea);
 		escritor.close();
 		for (int i=1;i<inventarioPC.size()+1;i++) {
@@ -245,8 +245,51 @@ public class App {
 		
 		
 	}
-	private static void cambiarPokemon() {
-		//por ahora no es necesario 
+	private static void cambiarPokemon() throws IOException {
+		//revisar los pokemones Invalidos 
+		boolean[] pokemonesInvalidos= new boolean[6];
+		if (inventarioPC.size()>6) {
+			for (int i =0; i<6;i++) {
+
+				if(inventarioPC.get(i).getEstado().equals("Debilitado")) {
+					pokemonesInvalidos[i] = true;
+				
+					}
+			
+				}
+		} else {
+			for (int i =0;i<inventarioPC.size();i++) {
+				
+				if(inventarioPC.get(i).getEstado().equals("Debilitado")) {
+					pokemonesInvalidos[i] = true;
+					
+				}
+			
+			}
+		}
+		
+		Scanner s =new Scanner(System.in);
+		revisarEquipo();
+		int respuesta1=1;
+		int respuesta2=-1;
+		int tamanio=0;
+		do {
+			System.out.println("Ahora con cual quiere cambiar? (ingrese indice)");
+			respuesta2 = Integer.parseInt(s.nextLine());
+			if (inventarioPC.size()>6){
+				tamanio=6;
+				
+			} else {
+				tamanio=inventarioPC.size();
+			}
+			if ((respuesta2<=tamanio)&&(respuesta2>=0)) {
+				if(pokemonesInvalidos[respuesta2-1]) System.out.println("no se puede cambiar a "+inventarioPC.get(respuesta2-1).getPokemon()+" porque se encuentra " + inventarioPC.get(respuesta2-1).getEstado());
+			}
+		}while (respuesta2>tamanio|| respuesta2<0 || pokemonesInvalidos[respuesta2-1]); //comprobar que no coloca un dato invalido 
+		intercambiarPosiciones(respuesta1, respuesta2);
+		
+		
+		
 	}
 	private static void atacar(int pokemonLider,int pokemonJugador) throws IOException {
 		statsEnemigo=equipoLider.get(pokemonLider).getStatTotales();// puntaje del pokemon del lider
@@ -376,12 +419,12 @@ public class App {
 		do {
 			System.out.println("cual pokemon quiere cambiar (ingrese indice)");
 			respuesta1 = Integer.parseInt(s.nextLine());
-		}while (respuesta1>inventarioPC.size()+1|| respuesta1<0); //comprobar que no coloca un dato invalido 
+		}while (respuesta1>inventarioPC.size()|| respuesta1<0); //comprobar que no coloca un dato invalido 
 		int respuesta2 =-1;
 		do {
 			System.out.println("Ahora con cual quiere cambiar el primero (ingrese indice)");
 			respuesta2 = Integer.parseInt(s.nextLine());
-		}while (respuesta2>inventarioPC.size()+1|| respuesta2<0); //comprobar que no coloca un dato invalido 
+		}while (respuesta2>inventarioPC.size()|| respuesta2<0); //comprobar que no coloca un dato invalido 
 		intercambiarPosiciones(respuesta1, respuesta2);
 		
 		
@@ -395,19 +438,6 @@ public class App {
 		inventarioPC.set(respuesta1-1, inventarioPC.get(respuesta2-1));
 		inventarioPC.set(respuesta2-1,temp);
 		
-		//almacenaje primera linea
-		File regist = new File("txts/Registros.txt");
-		Scanner scanReg = new Scanner(regist);
-		String primeraLinea = scanReg.nextLine();
-		//intercambio en el txt
-		FileWriter writerRegistro = new FileWriter("txts/Registros.txt"); // se resetea el achivo 
-		BufferedWriter escritor =new BufferedWriter(writerRegistro); //y se procede a recrear con el cambio de posiciones
-		escritor.write(primeraLinea);
-		escritor.close();
-		for (int i=1;i<inventarioPC.size()+1;i++) {
-			addPokeRegistros(i);
-		}
-
 		
 	}
 	//imprime el PC (todos los pokemones guardados en Registros)
