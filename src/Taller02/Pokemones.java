@@ -65,6 +65,9 @@ public class Pokemones {
 	public String derrotado() {
 		return estado="Debilitado";
 	}
+	public String vivo() {
+		return estado="Vivo";
+	}
 
 	public int getStatTotales() {
 		return statTotal;

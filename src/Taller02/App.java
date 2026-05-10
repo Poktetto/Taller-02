@@ -23,31 +23,37 @@ public class App {
 	public static String tipoPokemon[]={"Normal","Fuego","Agua","Planta","Electrico","Hielo","Lucha","Veneno","Tierra","Volado","Psiquico","Bicho","Roca","Fantasma","Dragon","Acero","Siniestro","Hada"};
 	public static int indJugador;
 	public static int indLider;
+	public static boolean finPartida=false;
 	
 	
 	
 	public static void main(String[] args) throws IOException {
 		menuInicial();
-		System.out.println("test fin programa");
+		System.out.println("Nos vemos entrenador");
 	}// main
 	//menu Inicial
 	private static void menuInicial() throws IOException {
 		int opcion=-1;
 		Scanner s = new Scanner(System.in);
 		do {
-			System.out.println("1) Continuar");
-			System.out.println("2) Nueva Partida");
-			System.out.println("3) Salir");
-			System.out.print(">");
-			String resp = s.nextLine();
-			opcion= Integer.parseInt(resp);
-			if (opcion==1) {
-				continuar();
+			if (!finPartida) {
+				System.out.println("1) Continuar");
+				System.out.println("2) Nueva Partida");
+				System.out.println("3) Salir");
+				System.out.print(">");
+				String resp = s.nextLine();
+				opcion= Integer.parseInt(resp);
+				if (opcion==1) {
+					continuar();
+				}
+				if (opcion==2) {
+					nuevaPartida();
+					
+				}
+			} else {
+				opcion=3;
 			}
-			if (opcion==2) {
-				nuevaPartida();
-				
-			}
+			
 		}while (opcion!=3);
 		
 		s.close();
@@ -112,10 +118,15 @@ public class App {
 			case 5:
 				break;
 			case 6:
+				curarPokemon();
 				break;
 			case 7:
+				guardarPartida();
+				System.out.println("se ha guardado exitosamente la partida");
 				break;
 			default:
+				guardarPartida();
+				finPartida=true; //basicamente es lo que indica al menu Inicial a no continuar
 				break;
 			
 			}
@@ -124,6 +135,32 @@ public class App {
 		}while (opcion!=8);
 		
 		
+	}
+	//re escribe todo el txt registros en base a el inventarioPC
+	private static void guardarPartida() throws IOException {
+		//almacenaje primera linea
+		File regist = new File("txts/Registros.txt");
+		Scanner scanReg = new Scanner(regist);
+		String primeraLinea = scanReg.nextLine();
+		//re escritura del txt
+		FileWriter writerRegistro = new FileWriter("txts/Registros.txt"); // se resetea el achivo 
+		BufferedWriter escritor =new BufferedWriter(writerRegistro); //y se procede a recrear con el cambio de posiciones
+		escritor.write(primeraLinea);
+		escritor.close();
+		for (int i=1;i<inventarioPC.size()+1;i++) {
+			addPokeRegistros(i);
+		}
+		
+	}
+	//cura toda la lista de inventarioPC
+	private static void curarPokemon() throws IOException {
+		//cura los pokemones y los guarda en registros (guardar no es necesario)
+		for (int i=0;i<inventarioPC.size();i++) {
+			inventarioPC.get(i).vivo();
+		}
+		System.out.println("================================");
+		System.out.println("los pokemones se han recuperado");
+		System.out.println("================================");
 	}
 	//opcion 4
 	private static void retarGimnasio() throws IOException {
@@ -589,7 +626,7 @@ public class App {
 		FileWriter pokeRegistros = new FileWriter("txts/Registros.txt", true);
 		BufferedWriter writRegistros = new BufferedWriter(pokeRegistros);
 		writRegistros.newLine();
-		writRegistros.write(inventarioPC.get(indice-1).getPokemon()+";Vivo");
+		writRegistros.write(inventarioPC.get(indice-1).getPokemon()+";"+inventarioPC.get(indice-1).getEstado());
 		writRegistros.close();
 		
 	}
