@@ -170,7 +170,7 @@ public class App {
 				
 				
 			}else {
-				
+				liderAltoMando=lideresAltoMAndo[0];
 				System.out.println("Que empieze el Torneo!!");
 				menuCombateAltoM();
 			}
