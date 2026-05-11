@@ -1,4 +1,7 @@
 package Taller02;
+//Alvaro Sebastian Orrego Ramírez RUT:22185824-7  Carrera: ITI
+//Anita Constanza Rojas Urrutia RUT: 22286335-K  Carrera: ITI
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -306,6 +309,7 @@ public class App {
 		}
 		System.out.println("9) Volver al menu.");
 		String resp = s.nextLine();
+		if (Integer.parseInt(resp)!=9) {
 		opcion= Integer.parseInt(resp); //ingresa "id" del entrenador (tecnicamente no, pero aparenta eso)
 		for (int i=0;i<lideres.length;i++) {
 			if (opcion==1) { // si es el primer lider
@@ -329,6 +333,7 @@ public class App {
 			}
 			
 			
+		}
 		}
 		
 		
@@ -367,6 +372,11 @@ public class App {
 					cambiarPokemon();
 					break;
 				default:
+					pokemonLider=0; 
+					pokemonJugador=0;
+					for (int i=0;i<equipoLider.size();i++) {
+						equipoLider.get(i).vivo();
+					}
 					break;
 					
 				}
@@ -444,13 +454,13 @@ public class App {
 				indJugador=i;
 			}
 		}
-		
-		statsJugador= (int) (statsJugador*TablaTipos.getEfectividad(pokemonLider, pokemonJugador)); //multiplicara el stat por la efectividad
-		if (TablaTipos.getEfectividad(pokemonLider, pokemonJugador)==0.0||TablaTipos.getEfectividad(pokemonLider, pokemonJugador)==0.5){ //imprime en caso que no sea efectivo
+
+		statsJugador= (int) (statsJugador*TablaTipos.getEfectividad(buscarTipo(pokemonJugador), buscarTipoE(pokemonLider))); //multiplicara el stat por la efectividad
+		if (TablaTipos.getEfectividad(buscarTipo(pokemonJugador), buscarTipoE(pokemonLider))==0.0||TablaTipos.getEfectividad(buscarTipo(pokemonJugador), buscarTipoE(pokemonLider))==0.5){ //imprime en caso que no sea efectivo
 			System.out.println(inventarioPC.get(pokemonJugador).getPokemon()+" no es efectivo contra "+equipoLider.get(pokemonLider).getPokemon());
 			System.out.println(inventarioPC.get(pokemonJugador).getPokemon()+" ->"+statsJugador);
 			System.out.println(equipoLider.get(pokemonLider).getPokemon()+" ->"+statsEnemigo);
-		}else if (TablaTipos.getEfectividad(pokemonLider, pokemonJugador)==2.0) { //imprime en caso que SI sea efectivo
+		}else if (TablaTipos.getEfectividad(buscarTipo(pokemonJugador), buscarTipoE(pokemonLider))==2.0) { //imprime en caso que SI sea efectivo
 			System.out.println(inventarioPC.get(pokemonJugador).getPokemon()+"es efectivo contra "+equipoLider.get(pokemonLider).getPokemon()+"!!");
 			System.out.println(inventarioPC.get(pokemonJugador).getPokemon()+" ->"+statsJugador);
 			System.out.println(equipoLider.get(pokemonLider).getPokemon()+" ->"+statsEnemigo);
@@ -474,6 +484,23 @@ public class App {
 		}
 		
 	
+	}
+	private static int buscarTipoE(int pokemonLider) {
+		for (int i=0;i<tipoPokemon.length;i++) {
+			if (equipoLider.get(pokemonLider).getTipo().equals(tipoPokemon[i])) {
+				return i;
+			}
+		}
+		return 0;
+	}
+	private static int buscarTipo(int pokemonJugador) {
+		for (int i=0;i<tipoPokemon.length;i++) {
+			if (inventarioPC.get(pokemonJugador).getTipo().equals(tipoPokemon[i])) {
+				return i;
+			}
+		}
+		return 0;
+		
 	}
 	private static void intercambiarPosicionesEnemigo(int pokemonActual, int pokemonVivo) {
 		//intercambio en la lista
